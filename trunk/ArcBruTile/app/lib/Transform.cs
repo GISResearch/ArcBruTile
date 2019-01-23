@@ -4,16 +4,18 @@ namespace BrutileArcGIS.Lib
 {
     public class Transform
     {
-        float _resolution;
+        float _resolutionX;
+        float _resolutionY;
         PointF _center;
         float _width;
         float _height;
         BruTile.Extent _extent;
 
-        public Transform(PointF center, float resolution, float width, float height)
+        public Transform(PointF center, float resolutionX, float resolutionY, float width, float height)
         {
             _center = center;
-            _resolution = resolution;
+            _resolutionX = resolutionX;
+            _resolutionY = resolutionY;
             _width = width;
             _height = height;
             UpdateExtent();
@@ -23,12 +25,12 @@ namespace BrutileArcGIS.Lib
         {
             set
             {
-                _resolution = value;
+                _resolutionX = value;
                 UpdateExtent();
             }
             get
             {
-                return _resolution;
+                return _resolutionX;
             }
         }
 
@@ -66,12 +68,12 @@ namespace BrutileArcGIS.Lib
 
         public PointF WorldToMap(double x, double y)
         {
-            return new PointF((float)(x - _extent.MinX) / _resolution, (float)(_extent.MaxY - y) / _resolution);
+            return new PointF((float)(x - _extent.MinX) / _resolutionX, (float)(_extent.MaxY - y) / _resolutionX);
         }
 
         public PointF MapToWorld(double x, double y)
         {
-            return new PointF((float)(_extent.MinX + x) * _resolution, (float)(_extent.MaxY - y) * _resolution);
+            return new PointF((float)(_extent.MinX + x) * _resolutionX, (float)(_extent.MaxY - y) * _resolutionX);
         }
 
         public RectangleF WorldToMap(double x1, double y1, double x2, double y2)
@@ -83,8 +85,8 @@ namespace BrutileArcGIS.Lib
 
        private void UpdateExtent()
         {
-            var spanX = _width * _resolution;
-            var spanY = _height * _resolution;
+            var spanX = _width * _resolutionX;
+            var spanY = _height * _resolutionX;
             _extent = new BruTile.Extent(_center.X - spanX * 0.5f, _center.Y - spanY * 0.5f,
               _center.X + spanX * 0.5f, _center.Y + spanY * 0.5f);
         }

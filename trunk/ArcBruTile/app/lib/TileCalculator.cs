@@ -31,12 +31,13 @@ namespace BrutileArcGIS.lib
 
                 var mapWidth = activeView.ExportFrame.right;
                 var mapHeight = activeView.ExportFrame.bottom;
-                var resolution = env.GetMapResolution(mapWidth);
-                Logger.Debug("Map resolution: " + resolution);
+                var resolutionX = env.GetMapResolution(mapWidth);
+                var resolutionY = System.Convert.ToSingle(env.Height / mapHeight);
+                Logger.Debug("Map resolution: " + resolutionX);
 
                 var centerPoint = env.GetCenterPoint();
 
-                var transform = new Transform(centerPoint, resolution, mapWidth, mapHeight);
+                var transform = new Transform(centerPoint, resolutionX, resolutionY, mapWidth, mapHeight);
                 var level = Utilities.GetNearestLevel(schema.Resolutions, transform.Resolution);
                 Logger.Debug("Current level: " + level);
 
